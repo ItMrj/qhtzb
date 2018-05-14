@@ -1,0 +1,157 @@
+apply plugin: 'com.android.application'
+
+def releaseTime() {
+    return new Date().format("yyyy.MM.dd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
+    defaultConfig {
+        applicationId "com.qhsd.qhyyw"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 3
+        versionName "1.2"
+        // dex突破65535的限制
+        multiDexEnabled true
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "default_channel"]
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "09c33ca5679aa095763734c5", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
+    }
+
+
+    lintOptions {
+        abortOnError false
+        // 防止在发布的时候出现因MissingTranslation导致Build Failed!
+        disable 'MissingTranslation'
+    }
+//
+    signingConfigs {
+        debug {
+            keyAlias 'lhwhKey'
+            keyPassword 'lhwh..2017'
+            storeFile file('/keystore/qihuoKey/lhwhKey.jks')
+            storePassword 'lhwh..2017'
+        }
+
+        release {
+            keyAlias 'lhwhKey'
+            keyPassword 'lhwh..2017'
+            storeFile file('/keystore/qihuoKey/lhwhKey.jks')
+            storePassword 'lhwh..2017'
+            v2SigningEnabled true
+        }
+    }
+//
+//    signingConfigs {
+//        debug {
+//            keyAlias 'xhhKey'
+//            keyPassword 'xhh..1029'
+//            storeFile file('/keystore/lhqh/xhhKeyStore.jks')
+//            storePassword 'xhh..1029'
+//        }
+//
+//        release {
+//            keyAlias 'xhhKey'
+//            keyPassword 'xhh..1029'
+//            storeFile file('/keystore/lhqh/xhhKeyStore.jks')
+//            storePassword 'xhh..1029'
+//            v2SigningEnabled true
+//        }
+//    }
+
+//    signingConfigs {
+//        debug {
+//            keyAlias 'bbdkKey'
+//            keyPassword 'bbdk..2017'
+//            storeFile file('/keystore/bbdkKey.jks')
+//            storePassword 'bbdk..2017'
+//        }
+//
+//        release {
+//            keyAlias 'bbdkKey'
+//            keyPassword 'bbdk..2017'
+//            storeFile file('/keystore/bbdkKey.jks')
+//            storePassword 'bbdk..2017'
+//            v2SigningEnabled true
+//        }
+//    }
+
+    buildTypes {
+        release {
+
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 混淆
+            minifyEnabled false
+            // Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources false
+            //前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为xxx_v1.0_2015-01-15_wandoujia.apk  xxx可以进行自定义
+
+                        def fileName = "qhtzb_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+//                        def fileName = "hjwhb-app-${defaultConfig.versionName}-beta1-${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+
+    // 友盟多渠道打包
+    productFlavors {
+        _360 { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "360"] }
+        yingyongbao { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yingyongbao"] }
+        xiaomi { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"] }
+        huawei { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huawei"] }
+        oppo { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "oppo"] }
+        baidu { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"] }
+        vivo { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "vivo"] }
+        lishi { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "lishi"] }
+        meizu { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "meizu"] }
+        sougou { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "sougou"] }
+        samsung { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "samsung"] }
+        wandoujia { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"] }
+        promotion { manifestPlaceholders = [UMENG_CHANNEL_VALUE: "promotion"] }
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //友盟
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    //极光推送
+    compile 'cn.jiguang.sdk:jpush:3.0.3'
+    // 此处以JPush 3.0.3 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.google.code.gson:gson:2.2.4'
+}

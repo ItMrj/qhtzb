@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_dialog"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:text="策略建议"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:background="#e8e8e8"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+
+    <ScrollView
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="240dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.qhsd.qhtzb.view.AutoSplitTextView
+                android:id="@+id/dialog_open_success_tv"
+                android:textColor="#333333"
+                android:text=""
+                android:textSize="14sp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textColor="#666666"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:layout_marginBottom="3dp"
+                android:text="入市有风险，仅供参考"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+
+
+    <View
+        android:background="#e8e8e8"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/shape_corner"
+        android:id="@+id/dialog_btn"
+        android:text="确认"
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="35dp" />
+
+</LinearLayout>

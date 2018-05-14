@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#262834</color>
+    <color name="colorPrimaryDark">#262834</color>
+    <color name="colorAccent">#262834</color>
+
+    <color name="white">#ffffff</color>
+
+    <!-- 等待对话框 -->
+    <color name="base_progress_dark_bg">#000000</color>
+    <color name="base_progress_dark_border">#343536</color>
+    <color name="base_progress_dark_text_color">#999999</color>
+    <color name="base_progress_light_bg">#F1F1F1</color>
+    <color name="base_progress_light_border">#CCCCCC</color>
+    <color name="base_progress_light_text_color">#CCCCCC</color>
+</resources>
